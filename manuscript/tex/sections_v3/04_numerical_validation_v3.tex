@@ -1,0 +1,114 @@
+\section{\label{sec:numerics}Numerical Validation (Commuting Sector)}
+
+We now validate the nested Hubbard-Stratonovich construction against exact diagonalization (ED) benchmarks. To demonstrate the flexibility of the framework, we consider three distinct commuting models: a multi-qubit system with sector-dependent interactions, a Gaussian qutrit clock model, and a qutrit coupled to a non-Gaussian finite transverse-spin bath. In all cases, we compare the analytic predictions (derived in Sec.~\ref{sec:commuting}) and stochastic sampling results against the exact reduced density matrix.
+
+For all benchmarks, the reference state $\rho_S^{\mathrm{ED}}(\beta)$ is computed by exact diagonalization of the total system-bath Hamiltonian:
+\begin{equation}
+\rho_S^{\mathrm{ED}}(\beta)=\frac{\Tr_B\,e^{-\beta H_{\mathrm{tot}}}}{\Tr\,e^{-\beta H_{\mathrm{tot}}}}.
+\label{eq:v2_rho_ed}
+\end{equation}
+From this, we define the exact mean-force operator $H_{\mathrm{MF}}^{\mathrm{ED}}=-\beta^{-1}\log \rho_S^{\mathrm{ED}}+\mathrm{const}$. By construction, rebuilding $\rho$ from $H_{\mathrm{MF}}^{\mathrm{ED}}$ is exact up to numerical precision, as quantified by the trace distance \(D_{\mathrm{HMF}}=\tfrac12\|\rho_S^{\mathrm{ED}}-\mathcal N[e^{-\beta H_{\mathrm{MF}}^{\mathrm{ED}}}]\|_1\approx 0\). This diagnostic is monitored throughout our benchmarks to ensure that any observed errors are due to the approximations within the nested HS framework, rather than inconsistencies in the reference state.
+
+\subsection{Multi-qubit magnetisation sectors}
+
+Our first test considers an $N$-qubit system where the interaction is determined by the total magnetisation \(S_z=\sum_{i=1}^N \sigma_i^z\). The environmental influence is chosen to induce a sector distribution \(p(m)\propto g(m)\,\exp\!\left(k_2 m^2 + k_4 m^4\right)\), where $g(m)$ is the binomial degeneracy of the magnetisation sector $m\in\{-N,-N+2,\dots,N\}$. By treating $k_2$ and $k_4$ as effective cumulants, we can subject the nested HS framework to a controlled stress test where the exact result is known analytically.
+
+We examine two distinct regimes. In the positive semi-definite (PSD) branch ($k_4 > 0$), the quartic influence kernel is stable and standard real-valued auxiliary fields suffice. In the non-PSD branch ($k_4 < 0$), the kernel is inverted, requiring the quartic auxiliary field to effectively integrate along the imaginary axis (contour rotation) to ensure convergence. We compare exact analytic sector probabilities against HS Monte Carlo in both branches. Diagnostics include trace distance, max absolute error, and imaginary leakage \(\sum_m |\Im w_m| \big/ \sum_m |\Re w_m|\).
+
+Figure~\ref{fig:nhs_synth_nonpsd_v2} compares the exact sector probabilities with those obtained from the nested HS Monte Carlo sampling. Panels (A) and (B) demonstrate that the stochastic sampling faithfully reproduces the analytic distribution in both the PSD and non-PSD regimes. The convergence of the trace distance with sample count $M$, shown in Panel (C), confirms that the contour rotation method for negative quartic cumulants yields stable, unbiased estimates with standard Monte Carlo scaling. This reinstates the multi-qubit magnetisation stress test while validating contour-rotated HS sampling before the finite-bath qutrit benchmarks.
+
+\begin{figure*}[t]
+    \centering
+    \IfFileExists{../../simulations/results_v2/figures/nhs_synth_nonpsd_v2.pdf}{
+    \includegraphics[width=\textwidth]{../../simulations/results_v2/figures/nhs_synth_nonpsd_v2.pdf}
+    }{
+    \fbox{\parbox{0.95\textwidth}{\centering
+    Placeholder: run \texttt{plot\_nested\_hs\_suite\_v2.py} to generate\\
+    \texttt{simulations/results\_v2/figures/nhs\_synth\_nonpsd\_v2.pdf}.}}
+    }
+    \caption{\label{fig:nhs_synth_nonpsd_v2}
+    \textbf{Multi-qubit magnetisation sectors.}
+    Commuting $S_z$-sector benchmark with quartic cumulants.
+    (A) PSD regime ($k_4>0$): analytic vs Monte Carlo sector probabilities.
+    (B) Non-PSD regime ($k_4<0$): contour-rotated Monte Carlo vs analytic.
+    (C) Trace-distance convergence with sample count $M$.
+    }
+\end{figure*}
+
+\subsection{Qutrit clock phase model}
+
+To rigorously test the handling of complex-valued cumulants, we employ a qutrit clock model where the quartic cumulant carries a complex phase, \(\kappa_4=r\,e^{i\phi}\), while the quadratic cumulant satisfies \(\kappa_2=\kappa_4^\ast\). This setup breaks time-reversal symmetry in the influence functional and requires the auxiliary fields to sample complex-valued configurations. We sample populations versus $\phi/\pi$ for several correlation lengths $\tau_c$.
+
+For each $(\phi,\tau_c)$, we compare analytic phase-dependent populations to discretised functional HS Monte Carlo. To reduce Monte Carlo jaggedness, each $(\phi,\tau_c)$ point is estimated from replica-averaged sampling with a fixed total sample budget. This benchmark isolates phase handling and complex auxiliary-field sampling quality.
+
+Figure~\ref{fig:nhs_phase_clock_v2} presents the population dynamics as a function of the phase $\phi$. Panel (A) shows smooth analytic phase curves with Monte Carlo overlays (representative $\tau_c$) for direct visual matching. Panel (B) quantifies the error, plotting the trace distance error versus phase for each $\tau_c$ with replica uncertainty bands, confirming stable phase tracking.
+
+\begin{figure*}[t]
+    \centering
+    \IfFileExists{../../simulations/results_v2/figures/nhs_cng_phase_clock_v2.pdf}{
+    \includegraphics[width=\textwidth]{../../simulations/results_v2/figures/nhs_cng_phase_clock_v2.pdf}
+    }{
+    \fbox{\parbox{0.95\textwidth}{\centering
+    Placeholder: run \texttt{plot\_nested\_hs\_suite\_v2.py} to generate\\
+    \texttt{simulations/results\_v2/figures/nhs\_cng\_phase\_clock\_v2.pdf}.}}
+    }
+    \caption{\label{fig:nhs_phase_clock_v2}
+    \textbf{Qutrit clock phase model.}
+    (A) Phase-resolved populations: smooth analytic curves with Monte Carlo overlays.
+    (B) Trace-distance error $D(\mathbf p^{\mathrm{MC}},\mathbf p^{\mathrm{analytic}})$ vs phase, shown for each correlation length $\tau_c$ with replica uncertainty bands.
+    }
+\end{figure*}
+
+\subsection{Gaussian finite-bath benchmark}
+
+As a baseline for the finite-bath simulations, we consider a qutrit system with Hamiltonian \(H_S=\mathrm{diag}(0,0.9,1.8)\) coupled via \(f=\mathrm{diag}(0,1,2)\) to a discretised Ohmic bosonic bath. The bath Hamiltonian is \(H_B=\sum_k\omega_k(a_k^\dagger a_k+\tfrac12)\), and the interaction is \(H_I=f\otimes\sum_k c_k x_k\), with \(x_k=(a_k+a_k^\dagger)/\sqrt{2\omega_k}\). In this Gaussian limit, the exact HMF solution involves a simple reorganisation energy shift \(-\lambda_{\mathrm{disc}}f^2\), where \(\lambda_{\mathrm{disc}}=\sum_k c_k^2/(2\omega_k^2)\).
+
+At each $(\beta,g)$, we compare three quantities: the exact result from finite-bath ED, the commuting analytic prediction \(\rho_S^{\mathrm{an}}\propto e^{-\beta(H_S-\lambda_{\mathrm{disc}}f^2)}\), and scalar and path HS estimators. We also report $D_{\mathrm{HMF}}$ from exact HMF reconstruction. Primary observables are $p_2=\langle 2|\rho_S|2\rangle$ and trace distances \(D(\rho_a,\rho_b)=\tfrac12\|\rho_a-\rho_b\|_1\). We additionally monitor \(\lambda_{\mathrm{est}}= \frac{E_2-E_0+\beta^{-1}\ln(p_2/p_0)}{f_2^2-f_0^2}\) for $\beta$-invariance and $g^2$ scaling.
+
+Figure~\ref{fig:nhs_cg_v2} summarizes the results. Panel (A) confirms that all three methods agree on the equilibrium populations. Panel (B) analyzes the convergence of the discrete-bath diagonalization to the continuum analytic result as the number of bath modes increases, and shows Monte Carlo scaling. The exact-HMF reconstruction diagnostic is numerically at machine precision across the grid. The HS estimator residuals are shown to be consistent with the expected statistical noise, validating the Gaussian baseline of our code before introducing non-Gaussianity.
+
+\begin{figure*}[t]
+    \centering
+    \IfFileExists{../../simulations/results_v2/figures/nhs_cg_1_v2.pdf}{
+    \includegraphics[width=\textwidth]{../../simulations/results_v2/figures/nhs_cg_1_v2.pdf}
+    }{
+    \fbox{\parbox{0.95\textwidth}{\centering
+    Placeholder: run \texttt{plot\_nested\_hs\_suite\_v2.py} to generate\\
+    \texttt{simulations/results\_v2/figures/nhs\_cg\_1\_v2.pdf}.}}
+    }
+    \caption{\label{fig:nhs_cg_v2}
+    \textbf{Gaussian qutrit benchmark.}
+    (A) Coupled-level population $p_2$ vs inverse temperature: ED, analytic prediction, and HS estimators.
+    (B) ED-to-analytic cutoff convergence with HS residual baselines and Monte Carlo scaling inset.
+    }
+\end{figure*}
+
+\subsection{Non-Gaussian transverse-spin bath}
+
+Finally, we address the core challenge: a non-Gaussian environment. We couple the qutrit system to a finite bath of $N_B$ spins via a transverse interaction \(H_I=g\,f\otimes B\), where \(B=\sum_{j=1}^{N_B} c_j \sigma_j^z\), and the bath Hamiltonian is \(H_B=\sum_{j=1}^{N_B}\omega_j\sigma_j^x\). This model generates non-trivial odd and even cumulants at all orders.
+
+For each $(\beta,g)$, we compute $\rho_S^{\mathrm{ED}}$ from exact diagonalisation and extract cumulant coefficients $\alpha_2,\alpha_4,\alpha_6$ from derivatives of $\log Z_B(\theta)$. We then compare the nested HS truncation hierarchy, specifically $K_2$ (Gaussian), $K_2{+}K_4$, and stability-gated $K_2{+}K_4{+}K_6$ truncations. The sixth-order term is included only when the derivative-stability diagnostic satisfies \(\epsilon_6^{\mathrm{stab}}\le 0.35\); otherwise $\alpha_6$ is clipped to zero. Primary residuals are \(D_{(2)}, D_{(2+4)}, D_{(2+4+6)}\). Renormalisation indicators \(\chi_4=\alpha_4/\alpha_2^2\) and \(\chi_6=\alpha_6/|\alpha_2|^3\) are also monitored, along with exact-HMF reconstruction via $D_{\mathrm{HMF}}$.
+
+Figure~\ref{fig:nhs_cng_v2} compares the exact diagonalization results with the predictions of the truncation ladder. Panel (A) gives ED-vs-truncation population overlays at representative $(\beta,g)$ points, clearly showing that while the Gaussian ($K_2$) approximation captures the qualitative trend, it deviates significantly at strong coupling. The inclusion of the fourth-order cumulant ($K_2+K_4$) substantially reduces this error. Panel (B) shows truncation error versus coupling for low/mid/high $\beta$ slices, comparing $K_2$ and $K_2{+}K_4$. Panel (C) provides a comprehensive validity map in the $(\beta, g)$ plane, plotting the log-ratio of the errors $\log_{10}(D_{K2}/D_{K2+K4})$. Positive values (red/yellow regions) indicate that the quartic correction improves the result, which holds true for the vast majority of the parameter space. Panel (D) analyzes the scaling of the extracted cumulant coefficients $\alpha_n$. By plotting rescaled cumulants $\alpha_2/g^2$ and $\alpha_4/g^4$ with coupling-collapse bands, we clarify that the quartic coefficient is not negligible once coupling scaling is factored out, confirming that statistical non-Gaussianity persists even at weak coupling, distinguishing it from perturbative higher-order effects. The exact-HMF reconstruction remains numerically exact; residuals in (A-D) are truncation error, not an ED/HMF inconsistency.
+
+\begin{figure*}[t]
+    \centering
+    \IfFileExists{../../simulations/results_v2/figures/nhs_cng_1_v2.pdf}{
+    \includegraphics[width=\textwidth]{../../simulations/results_v2/figures/nhs_cng_1_v2.pdf}
+    }{
+    \fbox{\parbox{0.95\textwidth}{\centering
+    Placeholder: run \texttt{plot\_nested\_hs\_suite\_v2.py} to generate\\
+    \texttt{simulations/results\_v2/figures/nhs\_cng\_1\_v2.pdf}.}}
+    }
+    \caption{\label{fig:nhs_cng_v2}
+    \textbf{Non-Gaussian finite-spin bath.}
+    (A) Qutrit population overlays at representative $(\beta,g)$ for ED and truncation ladder.
+    (B) Trace-distance vs coupling for low/mid/high $\beta$ slices, comparing $K_2$ and $K_2{+}K_4$.
+    (C) Validity map $\log_{10}(D_{K2}/D_{K2+K4})$ in the $(\beta,g)$ plane; positive values indicate quartic improvement.
+    (D) Rescaled cumulants $\alpha_2/g^2$ and $\alpha_4/g^4$ confirm consistent non-Gaussian scaling.
+    }
+\end{figure*}
+
+This progression of benchmarks---from analytic stress tests to finite-bath spin models---establishes the nested Hubbard-Stratonovich hierarchy as a robust, convergent, and numerically stable method for constructing Mean Force Hamiltonians in non-Gaussian environments.
+
+Non-commuting validations are intentionally deferred to the \textit{what\_rules\_equilibrium} paper; this manuscript version is strictly commuting-sector.

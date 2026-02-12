@@ -1,0 +1,229 @@
+\section{\label{sec:numerics}Numerical Validation (Commuting Sector)}
+
+All V2 simulations are produced by \texttt{run\_nested\_hs\_suite\_v2.py},
+with figures from \texttt{plot\_nested\_hs\_suite\_v2.py} and claim checks from
+\texttt{validate\_nested\_hs\_claims\_v2.py} in \path{simulations/src/}.
+To preserve continuity with V1, we retain the multi-qubit magnetisation and qutrit-clock phase benchmarks before the finite-bath ED qutrit tests.
+
+For all ED benchmarks we use
+\begin{equation}
+\rho_S^{\mathrm{ED}}(\beta)=\frac{\Tr_B\,e^{-\beta H_{\mathrm{tot}}}}{\Tr\,e^{-\beta H_{\mathrm{tot}}}},
+\label{eq:v2_rho_ed}
+\end{equation}
+and define the exact mean-force operator
+\begin{equation}
+H_{\mathrm{MF}}^{\mathrm{ED}}=-\beta^{-1}\log \rho_S^{\mathrm{ED}}+\mathrm{const}.
+\end{equation}
+By construction, rebuilding $\rho$ from $H_{\mathrm{MF}}^{\mathrm{ED}}$ is exact up to numerical precision:
+\(
+D_{\mathrm{HMF}}=\tfrac12\|\rho_S^{\mathrm{ED}}-\mathcal N[e^{-\beta H_{\mathrm{MF}}^{\mathrm{ED}}}]\|_1\approx 0.
+\)
+
+\subsection{Multi-qubit magnetisation benchmark (NHS-CNG-MAG-v2)}
+
+\paragraph{Model.}
+This is the V1 multi-qubit commuting benchmark recast in the V2 suite.
+We consider an $N$-qubit model resolved by total magnetisation
+\(
+S_z=\sum_{i=1}^N \sigma_i^z
+\),
+with sector probabilities
+\begin{equation}
+p(m)\propto g(m)\,\exp\!\left(k_2 m^2 + k_4 m^4\right),
+\end{equation}
+with magnetisation sectors $m\in\{-N,-N+2,\dots,N\}$ and binomial degeneracy $g(m)$.
+For the present test, $(k_2,k_4)$ are treated as controlled effective cumulant coefficients so that the exact sector law is known.
+
+\paragraph{Implementation.}
+We compare exact analytic sector probabilities against HS Monte Carlo in two branches:
+\begin{enumerate}
+\item PSD branch: $k_4>0$;
+\item non-PSD branch: $k_4<0$ with complex contour rotation in the quartic auxiliary field.
+\end{enumerate}
+Diagnostics include trace distance, max absolute error, and imaginary leakage
+\(
+\sum_m |\Im w_m| \big/ \sum_m |\Re w_m|.
+\)
+
+\paragraph{Result statement.}
+Figure~\ref{fig:nhs_synth_nonpsd_v2}(A,B) shows analytic-vs-MC overlays in both PSD and non-PSD branches.
+Figure~\ref{fig:nhs_synth_nonpsd_v2}(C) shows convergence with sample count.
+This reinstates the multi-qubit magnetisation stress test while validating contour-rotated HS sampling before the finite-bath qutrit benchmarks.
+
+\begin{figure*}[t]
+    \centering
+    \IfFileExists{../../simulations/results_v2/figures/nhs_synth_nonpsd_v2.pdf}{
+    \includegraphics[width=\textwidth]{../../simulations/results_v2/figures/nhs_synth_nonpsd_v2.pdf}
+    }{
+    \fbox{\parbox{0.95\textwidth}{\centering
+    Placeholder: run \texttt{plot\_nested\_hs\_suite\_v2.py} to generate\\
+    \texttt{simulations/results\_v2/figures/nhs\_synth\_nonpsd\_v2.pdf}.}}
+    }
+    \caption{\label{fig:nhs_synth_nonpsd_v2}
+    \textbf{NHS-CNG-MAG-v2 (multi-qubit magnetisation sectors).}
+    Commuting $S_z$-sector benchmark with quartic cumulants.
+    (A) PSD branch ($k_4>0$): analytic vs Monte Carlo sector probabilities.
+    (B) non-PSD branch ($k_4<0$): contour-rotated Monte Carlo vs analytic.
+    (C) Trace-distance convergence with sample count $M$.
+    }
+\end{figure*}
+
+\subsection{Qutrit clock phase benchmark (NHS-CNG-PHASE-v2)}
+
+\paragraph{Model.}
+We use the commuting qutrit-clock setting with complex phase in the quartic cumulant:
+\begin{equation}
+\kappa_4=r\,e^{i\phi},\qquad \kappa_2=\kappa_4^\ast,
+\end{equation}
+and populations sampled versus $\phi/\pi$ for several correlation lengths $\tau_c$.
+
+\paragraph{Implementation.}
+For each $\phi$ and $\tau_c$, we compare analytic phase-dependent populations to discretised functional HS Monte Carlo.
+To reduce Monte Carlo jaggedness, each $(\phi,\tau_c)$ point is estimated from replica-averaged sampling with fixed total sample budget.
+This benchmark isolates phase handling and complex auxiliary-field sampling quality.
+
+\paragraph{Result statement.}
+Figure~\ref{fig:nhs_phase_clock_v2}(A) shows smooth analytic phase curves with Monte Carlo overlays (representative $\tau_c$) for direct visual matching.
+Figure~\ref{fig:nhs_phase_clock_v2}(B) shows trace-distance error versus phase for each $\tau_c$ with replica uncertainty bands, confirming stable phase tracking.
+
+\begin{figure*}[t]
+    \centering
+    \IfFileExists{../../simulations/results_v2/figures/nhs_cng_phase_clock_v2.pdf}{
+    \includegraphics[width=\textwidth]{../../simulations/results_v2/figures/nhs_cng_phase_clock_v2.pdf}
+    }{
+    \fbox{\parbox{0.95\textwidth}{\centering
+    Placeholder: run \texttt{plot\_nested\_hs\_suite\_v2.py} to generate\\
+    \texttt{simulations/results\_v2/figures/nhs\_cng\_phase\_clock\_v2.pdf}.}}
+    }
+    \caption{\label{fig:nhs_phase_clock_v2}
+    \textbf{NHS-CNG-PHASE-v2.}
+    Qutrit clock phase benchmark.
+    (A) Phase-resolved populations: smooth analytic curves with Monte Carlo overlays.
+    (B) Trace-distance error $D(\mathbf p^{\mathrm{MC}},\mathbf p^{\mathrm{analytic}})$ vs phase, shown for each $\tau_c$ with replica uncertainty bands.
+    }
+\end{figure*}
+
+\subsection{Commuting Gaussian qutrit benchmark (NHS-CG-1-v2)}
+
+\paragraph{Model.}
+We use
+\begin{equation}
+H_S=\mathrm{diag}(0,0.9,1.8),\qquad f=\mathrm{diag}(0,1,2),
+\end{equation}
+coupled to a finite-mode harmonic bath:
+\begin{equation}
+H_B=\sum_k\omega_k(a_k^\dagger a_k+\tfrac12),\qquad
+H_I=f\otimes\sum_k c_k x_k,
+\end{equation}
+with $x_k=(a_k+a_k^\dagger)/\sqrt{2\omega_k}$ and Ohmic discretisation.
+
+\paragraph{Implementation.}
+At each $(\beta,g)$ we compare:
+\begin{enumerate}
+\item finite-bath ED;
+\item commuting analytic prediction
+\(
+\rho_S^{\mathrm{an}}\propto e^{-\beta(H_S-\lambda_{\mathrm{disc}}f^2)}
+\),
+\(
+\lambda_{\mathrm{disc}}=\sum_k c_k^2/(2\omega_k^2)
+\);
+\item scalar and path HS estimators.
+\end{enumerate}
+We also report $D_{\mathrm{HMF}}$ from exact HMF reconstruction.
+
+\paragraph{Observable definitions.}
+Primary observables are $p_2=\langle 2|\rho_S|2\rangle$ and trace distances
+\(
+D(\rho_a,\rho_b)=\tfrac12\|\rho_a-\rho_b\|_1
+\).
+We additionally monitor
+\begin{equation}
+\lambda_{\mathrm{est}}=
+\frac{E_2-E_0+\beta^{-1}\ln(p_2/p_0)}{f_2^2-f_0^2},
+\label{eq:v2_lambda_est}
+\end{equation}
+for $\beta$-invariance and $g^2$ scaling.
+
+\paragraph{Result statement.}
+Figure~\ref{fig:nhs_cg_v2}(A) shows ED/analytic/HS agreement in the coupled population.
+Figure~\ref{fig:nhs_cg_v2}(B) shows cutoff convergence and Monte Carlo scaling.
+The exact-HMF reconstruction diagnostic is numerically at machine precision across the grid.
+
+\begin{figure*}[t]
+    \centering
+    \IfFileExists{../../simulations/results_v2/figures/nhs_cg_1_v2.pdf}{
+    \includegraphics[width=\textwidth]{../../simulations/results_v2/figures/nhs_cg_1_v2.pdf}
+    }{
+    \fbox{\parbox{0.95\textwidth}{\centering
+    Placeholder: run \texttt{plot\_nested\_hs\_suite\_v2.py} to generate\\
+    \texttt{simulations/results\_v2/figures/nhs\_cg\_1\_v2.pdf}.}}
+    }
+    \caption{\label{fig:nhs_cg_v2}
+    \textbf{NHS-CG-1-v2 (commuting Gaussian qutrit).}
+    (A) Coupled-level population $p_2$ vs inverse temperature: ED, analytic prediction, and HS estimators.
+    (B) ED-to-analytic cutoff convergence with HS residual baselines and Monte Carlo scaling inset.
+    }
+\end{figure*}
+
+\subsection{Commuting non-Gaussian finite-spin qutrit benchmark (NHS-CNG-1-v2)}
+
+\paragraph{Model.}
+We keep the same commuting qutrit and use a finite transverse-spin bath:
+\begin{equation}
+H_B=\sum_{j=1}^{N_B}\omega_j\sigma_j^x,\qquad
+B=\sum_{j=1}^{N_B} c_j \sigma_j^z,\qquad
+H_I=g\,f\otimes B.
+\end{equation}
+
+\paragraph{Implementation.}
+For each $(\beta,g)$:
+\begin{enumerate}
+\item compute $\rho_S^{\mathrm{ED}}$ from exact diagonalisation;
+\item extract $\alpha_2,\alpha_4,\alpha_6$ from derivatives of $\log Z_B(\theta)$;
+\item compare $K_2$, $K_2{+}K_4$, and stability-gated $K_2{+}K_4{+}K_6$ truncations.
+\end{enumerate}
+The sixth-order term is included only when the derivative-stability diagnostic satisfies
+\(
+\epsilon_6^{\mathrm{stab}}\le 0.35
+\);
+otherwise $\alpha_6$ is clipped to zero.
+
+\paragraph{Observable definitions.}
+Primary residuals:
+\(
+D_{(2)}, D_{(2+4)}, D_{(2+4+6)}.
+\)
+Renormalisation indicators:
+\(
+\chi_4=\alpha_4/\alpha_2^2,\;
+\chi_6=\alpha_6/|\alpha_2|^3.
+\)
+We also monitor exact-HMF reconstruction via $D_{\mathrm{HMF}}$.
+
+\paragraph{Result statement.}
+Figure~\ref{fig:nhs_cng_v2}(A) gives ED-vs-truncation population overlays.
+Figure~\ref{fig:nhs_cng_v2}(B) shows truncation error versus coupling at low/mid/high $\beta$ slices.
+Figure~\ref{fig:nhs_cng_v2}(C) gives a full validity map, $\log_{10}(D_{K2}/D_{K2+K4})$, identifying where quartic truncation helps or breaks down.
+Figure~\ref{fig:nhs_cng_v2}(D) shows rescaled cumulant coefficients $\alpha_2/g^2$ and $\alpha_4/g^4$, clarifying that the quartic coefficient is not negligible once coupling scaling is factored out.
+The exact-HMF reconstruction remains numerically exact; residuals in (A-D) are truncation error, not an ED/HMF inconsistency.
+
+\begin{figure*}[t]
+    \centering
+    \IfFileExists{../../simulations/results_v2/figures/nhs_cng_1_v2.pdf}{
+    \includegraphics[width=\textwidth]{../../simulations/results_v2/figures/nhs_cng_1_v2.pdf}
+    }{
+    \fbox{\parbox{0.95\textwidth}{\centering
+    Placeholder: run \texttt{plot\_nested\_hs\_suite\_v2.py} to generate\\
+    \texttt{simulations/results\_v2/figures/nhs\_cng\_1\_v2.pdf}.}}
+    }
+    \caption{\label{fig:nhs_cng_v2}
+    \textbf{NHS-CNG-1-v2 (commuting non-Gaussian finite-spin qutrit).}
+    (A) Qutrit population overlays at representative $(\beta,g)$ for ED and truncation ladder.
+    (B) Trace-distance vs coupling for low/mid/high $\beta$ slices, comparing $K_2$ and $K_2{+}K_4$.
+    (C) Validity map $\log_{10}(D_{K2}/D_{K2+K4})$ in the $(\beta,g)$ plane; positive values indicate quartic improvement.
+    (D) Rescaled cumulants $\alpha_2/g^2$ and $\alpha_4/g^4$ with coupling-collapse bands.
+    }
+\end{figure*}
+
+Non-commuting validations are intentionally deferred to the \textit{what\_rules\_equilibrium} paper; this manuscript version is strictly commuting-sector.

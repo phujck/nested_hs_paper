@@ -1,0 +1,8 @@
+{
+  "suite": "nested_hs_v2",
+  "profile": "publish",
+  "regime": "all",
+  "seed": 42,
+  "n_workers": 1,
+  "duration_sec": 36.72849178314209
+}

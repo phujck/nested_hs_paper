@@ -1,0 +1,35 @@
+\section{Demonstration: Cumulant Attachment in N-level Systems}
+\label{sec:algebraic_demo}
+
+The algebraic closure principle derived in Sec.~\ref{sec:consequences} makes a strong prediction: the ability of a non-Gaussian bath to deform the system Hamiltonian is strictly limited by the algebra of the coupling operator $f$. In this section, we test this prediction directly by comparing two $N$-level clock models coupled to the same non-Gaussian bath.
+
+Consider an $N$-level system with the clock coupling operator $f = \mathrm{diag}(1, \omega, \dots, \omega^{N-1})$, where $\omega = e^{2\pi i/N}$. The system Hamiltonian is $H_S = J(f + f^\dagger)$. The spin bath is identical to the one in Sec.~\ref{sec:numerics}, characterized by significant non-Gaussian spectral content ($\alpha_4 \neq 0$).
+
+\subsection{Automatic Triviality ($N=4$)}
+To isolate the algebraic filtering effect from dynamical complexity, we consider a system Hamiltonian $H_S$ that commutes with the coupling operator $f$, i.e., $[H_S, f] = 0$. This corresponds to a pure dephasing model where the bath modulates the energy levels without inducing transitions.
+For $N=4$, the eigenvalues of $f$ are fourth roots of unity, so $f^4 = I$.
+Since the cumulant expansion in the commuting limit effectively adds terms proportional to $\alpha_n f^n$ to the Hamiltonian, the fourth-order term $\alpha_4 f^4$ becomes a scalar $\alpha_4 I$. This shifts all energy levels uniformly, leaving the population statistics $p_k \propto \langle k | e^{-\beta H_{eff}} | k \rangle$ invariant.
+Consequently, the $K_2+K_4$ approximation is \textit{exactly} identical to the Gaussian $K_2$ result.
+
+Figure~\ref{fig:algebraic_closure}(A) shows the populations $P_0$ and $P_1$ extended to $g=1.2$. The Gaussian approximation ($K_2$, dashed blue) deviates significantly from the exact result (solid black/gray).
+Crucially, the $K_2+K_4$ prediction (dotted red) lies \textbf{exactly} on top of the Gaussian curve for both levels, confirming the algebraic invisibility of the quartic cumulant. The error is corrected by the sixth-order cumulant ($K_2+K_4+K_6$, dot-dashed green) for moderate couplings ($g \lesssim 0.8$), but eventually deviates as the perturbative series approaches its radius of convergence.
+
+\subsection{Cumulant Attachment ($N=5$)}
+For $N=5$, $f^4$ is not proportional to $I$ or $f^2$. The fourth-order term $\alpha_4 f^4$ modifies the energy landscape non-uniformly.
+Figure~\ref{fig:algebraic_closure}(B) shows that the $K_2+K_4$ approximation (dotted red) immediately separates from the Gaussian baseline (dashed blue) for all levels and corrects the error, moving closer to the exact result before the series expansion limits are reached.
+
+This comparison demonstrates "algebraic closure": when the system algebra is closed at a lower order ($f^4=I$), high-order non-Gaussian information is structurally filtered out. Convergence requires that the cumulants attach to linearly independent operator slots in the effective Hamiltonian.
+
+\begin{figure}[t]
+    \centering
+    \IfFileExists{../../simulations/results_v2/figures/nhs_algebraic_closure.pdf}{
+    \includegraphics[width=\columnwidth]{../../simulations/results_v2/figures/nhs_algebraic_closure.pdf}
+    }{
+    \includegraphics[width=\columnwidth]{example-image-a}
+    }
+    \caption{\label{fig:algebraic_closure}
+    \textbf{Algebraic Filtering ($[H_S, f]=0$).}
+    Population of first two energy levels ($P_0$ dark, $P_1$ light) vs coupling $g$.
+    (A) $\mathbf{N=4}$: Since $f^4 = I$, the quartic correction is a scalar shift and is invisible ($K2+K4$ overlaps $K2$ for both levels). The error is corrected by $K_6$ up to the convergence radius ($g \approx 0.8$).
+    (B) $\mathbf{N=5}$: $f^4$ is non-trivial. $K_4$ explicitly corrects the Gaussian error (Red curve separates from Blue).    }
+\end{figure}

@@ -1,0 +1,33 @@
+\section{\label{sec:intro}Introduction}
+
+The Hamiltonian of mean force (HMF) is the effective operator whose Gibbs form reproduces the reduced equilibrium state of a strongly coupled open quantum system~\cite{campisiFluctuationTheoremArbitrary2009,talknerColloquiumStatisticalMechanics2020,trushechkinOpenQuantumSystem2022,seifertFirstSecondLaw2016}. For
+\(
+H=H_S+H_B+f\otimes B
+\),
+one defines
+\(
+\bar\rho_S=\Tr_B e^{-\beta H}
+\)
+and
+\(
+e^{-\beta H_{\mathrm{MF}}}=\bar\rho_S/Z_B
+\).
+In Gaussian settings, HS decoupling of the influence kernel is standard; in non-Gaussian settings, higher connected cumulants appear and the single-field HS picture is insufficient.
+
+The central technical point of this work is that each even-order cumulant contribution can be rewritten as a quadratic form in a composite field and therefore decoupled by a Gaussian auxiliary field at that level. This yields a nested HS hierarchy that is exact order-by-order.
+
+This V2 manuscript focuses strictly on the commuting sector, $[H_S,f]=0$, where the hierarchy collapses to scalar cumulant coefficients and produces a polynomial HMF:
+\begin{equation}
+H_{\mathrm{MF}}=H_S-\sum_{n\ge 1}\alpha_{2n}f^{2n}+\mathrm{const}.
+\end{equation}
+The coefficients are extracted from a source-deformed bath partition function, enabling direct finite-bath benchmarking.
+
+Numerically, we use four commuting tests with exact reduced-state references:
+\begin{enumerate}
+\item a multi-qubit magnetisation-sector benchmark (including non-PSD quartic branch) with exact sector law and HS Monte Carlo overlays;
+\item a qutrit clock phase benchmark for complex-quartic phase handling under functional HS sampling;
+\item a Gaussian qutrit benchmark with bosonic finite-mode ED and HS overlays;
+\item a non-Gaussian qutrit benchmark with a finite transverse-spin bath, tested via truncation ladders $K_2$, $K_2{+}K_4$, and $K_2{+}K_4{+}K_6$.
+\end{enumerate}
+
+The non-commuting sector is intentionally deferred to the final paper in this project sequence.

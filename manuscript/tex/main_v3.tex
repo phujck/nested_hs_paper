@@ -1,0 +1,43 @@
+\documentclass[aps,pra,twocolumn,superscriptaddress,showpacs,floatfix]{revtex4-2}
+
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{hyperref}
+\usepackage{mathtools}
+\usepackage{bbm}
+
+\newcommand{\Tr}{\mathrm{Tr}}
+\newcommand{\re}{\mathrm{Re}\,}
+\newcommand{\im}{\mathrm{Im}\,}
+\setcounter{secnumdepth}{3}
+
+\begin{document}
+
+\title{Nested Hubbard--Stratonovich Representations for Non-Gaussian Influence Functionals}
+\author{Gerard McCaul}
+% \affiliation{Affiliation}
+\date{\today}
+
+\begin{abstract}
+The reduced equilibrium state of a quantum system coupled to a general environment is determined by the imaginary-time influence functional, whose cumulant structure encodes the full bath statistics. For Gaussian baths, a single Hubbard--Stratonovich transformation decouples the bilocal influence kernel. We show that the complete cumulant hierarchy---including all even-order connected correlators---admits an exact, constructive representation as a nested sequence of Gaussian auxiliary fields. At each order $2n$, the $n$-local composite of system coupling operators is paired with a Gaussian field whose covariance is fixed by the symmetry-projected cumulant kernel. In the commuting sector $[H_S,f]=0$, this hierarchy re-averages analytically into a polynomial Hamiltonian of mean force, $H_{\mathrm{MF}} = H_S - \sum_{n\geq 1}\alpha_{2n}\,f^{2n}$, with coefficients determined by integrated bath cumulants. We validate this construction against a suite of commuting benchmarks: a multi-qubit magnetisation model, a qutrit clock model with complex cumulants, and a qutrit coupled to both Gaussian and non-Gaussian finite baths. In the latter, we compare exact diagonalisation to cumulant truncation ladders $K_2$, $K_2+K_4$, and $K_2+K_4+K_6$. Across the sampled parameter range, higher-order cumulants appear as controlled renormalisation corrections that systematically reduce residual error, confirming the convergence of the nested hierarchy in the strong-coupling regime.
+\end{abstract}
+
+\maketitle
+
+\input{sections_v3/00_introduction_v3}
+\input{sections_v3/01_setup_cumulants_v3}
+\input{sections_v3/02_nested_hs_v3}
+\input{sections_v3/03_commuting_sector_v3}
+\input{sections_v3/04_numerical_validation_v3}
+\input{sections_v3/05_consequences_v3.tex}
+\input{sections_v3/05b_algebraic_demo_v3.tex}
+\input{sections_v3/06_discussion_v3}
+
+\vspace{1em}
+\appendix
+\input{sections_v3/07_appendix_v3}
+
+\bibliography{references_new}
+
+\end{document}

@@ -1,0 +1,75 @@
+\appendix
+\section{\label{sec:appendix_v2}Numerical Implementation Details}
+
+\subsection{A. Bosonic finite-mode discretisation (Gaussian test)}
+
+The Gaussian benchmark uses an Ohmic spectral density
+\begin{equation}
+J(\omega)=2\eta g^2 \omega e^{-\omega/\omega_c},
+\end{equation}
+discretised on finite bins $\{\omega_k,\Delta\omega_k\}$ with
+\begin{equation}
+c_k^2=\frac{2}{\pi}J(\omega_k)\omega_k\Delta\omega_k,
+\qquad
+\lambda_{\mathrm{disc}}=\sum_k\frac{c_k^2}{2\omega_k^2}.
+\end{equation}
+The continuum reference used for scaling checks is
+\begin{equation}
+\lambda_{\mathrm{cont}}=\frac{1}{\pi}\int_0^\infty \frac{J(\omega)}{\omega}\,d\omega
+=\frac{2\eta\omega_c}{\pi}g^2.
+\end{equation}
+
+\subsection{B. HS estimators in the commuting Gaussian case}
+
+Two stochastic estimators are used:
+\begin{enumerate}
+\item scalar HS sampling of the integrated Gaussian variable;
+\item path HS sampling on an imaginary-time grid with covariance built from the discretised kernel.
+\end{enumerate}
+Both produce diagonal populations that are normalised explicitly before constructing $\rho_S$.
+
+\subsection{C. Cumulant extraction from source-deformed partition function (non-Gaussian test)}
+
+For the finite-spin bath we compute
+\begin{equation}
+\log Z_B(\theta)=\log\Tr_B e^{-\beta(H_B+\theta B)}
+\end{equation}
+on symmetric stencils and evaluate even derivatives by high-order central finite differences. We use two step sizes, $h$ and $h/2$, and define a stability diagnostic
+\begin{equation}
+\epsilon_{2n}^{\mathrm{stab}}
+=
+\frac{|d_{2n}(h/2)-d_{2n}(h)|}{|d_{2n}(h/2)|+\varepsilon}.
+\end{equation}
+Reported coefficients are
+\begin{equation}
+\alpha_{2n}
+=
+\frac{1}{\beta(2n)!}\,d_{2n}(h/2).
+\end{equation}
+
+\subsection{D. Positivity, Hermiticity, and contour remarks}
+
+In this commuting V2 workflow the reconstructed operators remain diagonal, and positivity is enforced by Gibbs reconstruction and normalisation. Hermiticity and trace diagnostics are recorded for every state.
+
+For general indefinite cumulant kernels, the nested HS construction is defined by contour rotation of negative-eigenvalue auxiliary components. Although no explicit contour rotation is needed in the diagonal commuting reconstructions used here, the diagnostics are retained in code and documentation for direct extension to the general case.
+
+\subsection{E. Error budgeting and claim gates}
+
+Three independent error sources are monitored:
+\begin{enumerate}
+\item ED truncation error (bosonic cutoff convergence),
+\item stochastic sampling error (MC scaling with $M$),
+\item cumulant-truncation error ($K_2$, $K_2{+}K_4$, $K_2{+}K_4{+}K_6$ hierarchy).
+\end{enumerate}
+Machine-readable PASS/FAIL outputs are stored in
+\texttt{simulations/results\_v2/claim\_metrics\_nested\_hs\_v2.json}.
+
+\subsection{F. V1-to-V2 benchmark parity}
+
+For direct continuity with the V1 manuscript:
+\begin{enumerate}
+\item V1 multi-qubit magnetisation benchmark is retained as NHS-CNG-MAG-v2 (manuscript Fig.~\ref{fig:nhs_synth_nonpsd_v2}).
+\item V1 qutrit clock phase benchmark is retained as NHS-CNG-PHASE-v2 (manuscript Fig.~\ref{fig:nhs_phase_clock_v2}).
+\item V1 Gaussian commuting qutrit benchmark is retained as NHS-CG-1-v2 (manuscript Fig.~\ref{fig:nhs_cg_v2}).
+\item V1 non-commuting sectors are intentionally moved to the final paper; they are not part of this commuting-only V2 scope.
+\end{enumerate}

@@ -1,0 +1,53 @@
+\section{\label{sec:commuting}Commuting Sector Theorem}
+
+Assume
+\begin{equation}
+[H_S,f]=0.
+\label{eq:v2_commuting_assumption}
+\end{equation}
+Then $f(\tau)=f$ in imaginary time, time ordering is algebraically trivial, and every composite field reduces to a power of $f$.
+
+\subsection{Exact commuting-sector HMF}
+
+With Eq.~\eqref{eq:v2_alpha_def}, the reduced operator becomes
+\begin{equation}
+\bar\rho_S(\beta)
+=
+Z_B\,
+\exp\!\left[
+-\beta H_S
+\;+\;
+\beta\sum_{n\ge 1}\alpha_{2n} f^{2n}
+\right].
+\label{eq:v2_commuting_rhobar}
+\end{equation}
+Hence
+\begin{equation}
+H_{\mathrm{MF}}(\beta)
+=
+H_S-\sum_{n\ge 1}\alpha_{2n}(\beta)f^{2n}+\text{const}.
+\label{eq:v2_commuting_hmf}
+\end{equation}
+
+\subsection{Physical interpretation}
+
+The commuting hierarchy has a clean interpretation:
+\begin{enumerate}
+\item $\alpha_2$ is the Gaussian reorganisation shift.
+\item $\alpha_4,\alpha_6,\dots$ are non-Gaussian renormalisation corrections.
+\item Finite spin baths are not ``purely quartic'': higher even cumulants are generically nonzero and reorganise the effective coefficients.
+\end{enumerate}
+Therefore, in the commuting sector, disagreement between $K_2$ and exact ED is interpreted as missing cumulant renormalisation, not a breakdown of the formalism.
+
+\subsection{Level-resolved diagnostics}
+
+For diagonal $H_S=\mathrm{diag}(E_i)$ and diagonal populations $p_i$,
+\begin{equation}
+\Delta_i
+:=
+E_i-E_0+\beta^{-1}\ln\frac{p_i}{p_0}
+=
+\sum_{n\ge 1}\alpha_{2n}\left(f_i^{2n}-f_0^{2n}\right),
+\label{eq:v2_level_shift}
+\end{equation}
+which we use as a direct numerical diagnostic of cumulant truncation quality.

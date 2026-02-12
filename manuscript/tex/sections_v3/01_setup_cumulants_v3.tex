@@ -1,0 +1,82 @@
+\section{\label{sec:cumulants}Setup and Cumulant Structure}
+
+We consider a system $S$ coupled to a bath $B$ through a total Hamiltonian
+\begin{equation}
+    H = H_S + H_B + f \otimes B,
+    \label{eq:Htot}
+\end{equation}
+where $f$ acts on the system Hilbert space, $B$ acts on the bath, and the tensor product structure is left implicit where unambiguous. The bath need not be harmonic: we make no assumption about $H_B$ beyond the existence of a well-defined thermal state $\rho_B = e^{-\beta H_B}/Z_B$.
+
+The object of interest is the reduced equilibrium operator, obtained by tracing out the bath from the global Gibbs state:
+\begin{equation}
+    \bar\rho_S(\beta) = \Tr_B\,e^{-\beta(H_S + H_B + f\otimes B)}.
+    \label{eq:rhobar_def}
+\end{equation}
+This is an unnormalised operator on the system Hilbert space. The Hamiltonian of mean force is defined as $H_{\mathrm{MF}}(\beta) = -\beta^{-1}\log[\bar\rho_S(\beta)/Z_B]$ and reproduces the normalised reduced equilibrium state as a Gibbs-like object.
+
+\subsection{Interaction picture and bath average}
+
+To separate the bath statistics from the system operator content, we pass to the imaginary-time interaction picture. Defining the bath-frame coupling operator
+\begin{equation}
+    B(\tau) = e^{\tau H_B}\,B\,e^{-\tau H_B},
+    \label{eq:B_interaction_picture}
+\end{equation}
+and the system-frame coupling operator
+\begin{equation}
+    f(\tau) = e^{\tau H_S}\,f\,e^{-\tau H_S},
+    \label{eq:f_interaction_picture}
+\end{equation}
+the reduced equilibrium operator takes the form
+\begin{equation}
+    \bar\rho_S(\beta) = e^{-\beta H_S}\,Z_B\left\langle \mathcal{T}_\tau\exp\!\left[\int_0^\beta\!d\tau\;B(\tau)\,f(\tau)\right]\right\rangle_{\!\!B},
+    \label{eq:rhobar_interaction}
+\end{equation}
+where $\langle\cdot\rangle_B = \Tr_B[\,\cdot\,\rho_B]$ denotes the thermal bath expectation and $\mathcal{T}_\tau$ orders later imaginary times to the left. Without loss of generality we assume $\langle B\rangle_B = 0$; any nonzero mean can be absorbed into $H_S$.
+
+The entire influence of the bath on the system is now encoded in the time-ordered average of an exponential of the bath variable $B(\tau)$. For a Gaussian bath this average is determined by the two-point function alone. For a general bath, it is not---and that is where the story gets interesting.
+
+\subsection{Connected cumulants}
+
+The bath average in Eq.~\eqref{eq:rhobar_interaction} admits a formal cumulant expansion. Define the connected (cumulant) correlators of the bath coupling operator:
+\begin{equation}
+    K_n(\tau_1,\ldots,\tau_n) = \langle\!\langle \mathcal{T}\,B(\tau_1)\cdots B(\tau_n)\rangle\!\rangle_B.
+    \label{eq:Kn_def}
+\end{equation}
+These are the connected parts of the time-ordered thermal correlation functions of $B(\tau)$, defined recursively through the moment--cumulant relation. The first cumulant vanishes by our convention $\langle B\rangle_B = 0$, and for baths with time-reversal symmetry (or more generally, for baths whose odd moments vanish), all odd-order cumulants $K_{2n+1} = 0$.
+
+The cumulant expansion of the influence functional reads~\cite{Kubo1962,Kubo1963,Fox1976}
+\begin{widetext}
+\begin{equation}
+    \log\left\langle \mathcal{T}\exp\!\left[\int_0^\beta\!d\tau\;B(\tau)\,f(\tau)\right]\right\rangle_{\!\!B}
+    =
+    \sum_{n=1}^{\infty}\frac{1}{n!}
+    \int_0^\beta\!d\tau_1\cdots\!\int_0^\beta\!d\tau_n\;
+    K_n(\tau_1,\ldots,\tau_n)\;\prod_{j=1}^n f(\tau_j).
+    \label{eq:cumulant_expansion}
+\end{equation}
+\end{widetext}
+This is an exact identity---not a truncation, not an approximation, not a perturbative expansion. The left-hand side is the log of a generating functional; the right-hand side is its cumulant series. Each term carries its own flavour of nonlocality: $K_2$ produces a bilocal coupling, $K_4$ a four-point coupling, and so on.
+
+For a Gaussian bath, $K_n = 0$ for all $n \geq 3$, and the series terminates at $n=2$:
+\begin{equation}
+    \log\langle\mathcal{T}\,e^{\int B f}\rangle_B
+    =
+    \frac{1}{2}\int_0^\beta\!d\tau\!\int_0^\beta\!d\tau'\,
+    K_2(\tau,\tau')\,f(\tau)\,f(\tau').
+    \label{eq:gaussian_truncation}
+\end{equation}
+This is the familiar influence kernel. The single Hubbard--Stratonovich transformation that decouples Eq.~\eqref{eq:gaussian_truncation} is the workhorse of Gaussian open-system theory, and the starting point of the companion paper~\cite{mccaulPartitionfreeApproachOpen2017c}.
+
+For a non-Gaussian bath, the series does not terminate. The first correction beyond Gaussian arises at $n=4$ (since odd cumulants vanish):
+\begin{equation}
+    \Phi^{(4)} = \frac{1}{4!}\int\!d\tau_1\cdots d\tau_4\;K_4(\tau_1,\tau_2,\tau_3,\tau_4)\prod_{j=1}^4 f(\tau_j),
+    \label{eq:Phi4_def}
+\end{equation}
+and the influence functional takes the form
+\begin{equation}
+    \log\langle\mathcal{T}\,e^{\int Bf}\rangle_B
+    =
+    \Phi^{(2)} + \Phi^{(4)} + \Phi^{(6)} + \cdots
+    \label{eq:IF_series}
+\end{equation}
+with $\Phi^{(2n)}$ the contribution from the $2n$-th cumulant. Each successive term is more nonlocal in imaginary time, and involves higher powers of the coupling operator. The question is: can we handle all of them on the same footing as the familiar Gaussian term? The answer, as we show next, is yes.

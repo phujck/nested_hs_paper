@@ -1,0 +1,63 @@
+\section{\label{sec:nested_hs}Nested Hubbard--Stratonovich Construction}
+
+The Gaussian ($K_2$) sector is decoupled by a single HS field because it is quadratic in the coupling operator. The higher-order analogue is to rewrite each even cumulant contribution as a quadratic form in a composite field, then apply HS at that level.
+
+\subsection{Quadratic-form rewriting at order 2n}
+
+Define the $n$-local composite
+\begin{equation}
+\Psi_n(\tau_1,\dots,\tau_n)=\prod_{j=1}^{n} f(\tau_j).
+\label{eq:v2_psin_def}
+\end{equation}
+The $2n$-th cumulant contribution can be written as
+\begin{equation}
+\Phi^{(2n)}
+=
+\frac{1}{2}\,\langle \Psi_n,\,C_n\,\Psi_n\rangle,
+\label{eq:v2_phi2n_quadratic}
+\end{equation}
+where $C_n$ is the symmetry-projected kernel built from $K_{2n}$ and the inner product integrates all time arguments. This is the precise higher-order completion-of-square analogue.
+
+\subsection{Level-wise HS decoupling}
+
+For any symmetric kernel $C_n$ (not necessarily PSD),
+\begin{equation}
+e^{\frac{1}{2}\langle \Psi_n,C_n\Psi_n\rangle}
+=
+\mathbb E_{\eta_n}\!\left[
+e^{\langle \eta_n,\Psi_n\rangle}
+\right],
+\label{eq:v2_hs_level}
+\end{equation}
+with Gaussian auxiliary field $\eta_n$ of covariance $C_n$. Therefore
+\begin{equation}
+\left\langle \mathcal T_\tau e^{\int Bf}\right\rangle_B
+=
+\prod_{n\ge 1}
+\mathbb E_{\eta_n}
+\left[
+\exp\!\left(
+\frac{1}{n!}\int \eta_n\,\Psi_n
+\right)
+\right].
+\label{eq:v2_nested_hs}
+\end{equation}
+Equation~\eqref{eq:v2_nested_hs} is exact order by order in cumulants.
+
+\subsection{Indefinite kernels and contour rotation}
+
+If $C_n$ has negative eigenvalues, one rotates those auxiliary components by $\eta\to i\eta$. The Gaussian integral remains convergent mode-by-mode and Eq.~\eqref{eq:v2_hs_level} remains exact. In practice we monitor imaginary-leakage diagnostics
+\(
+\max |\im w|/(|\re w|+\epsilon)
+\)
+for sampled weights.
+
+\subsection{Practical truncation used in numerics}
+
+The simulations in this paper use commuting-sector truncation ladders:
+\begin{align}
+H_{\mathrm{MF}}^{(2)} &= H_S-\alpha_2 f^2, \nonumber\\
+H_{\mathrm{MF}}^{(4)} &= H_S-\alpha_2 f^2-\alpha_4 f^4, \\
+H_{\mathrm{MF}}^{(6)} &= H_S-\alpha_2 f^2-\alpha_4 f^4-\alpha_6 f^6.\nonumber
+\end{align}
+These are compared directly against exact reduced states from finite-bath exact diagonalisation.

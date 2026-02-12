@@ -1,0 +1,33 @@
+{
+  "trace_distance": 0.24196366801305108,
+  "fro_error": 0.3023362171586133,
+  "hmf_basis_residual": 1.8735013540549517e-16,
+  "collapse_max_deviation": 1.3140391333099632e-06,
+  "slope_fit": {
+    "hs_scalar_log_slope": {
+      "slope": -0.48767550992955117,
+      "intercept": -3.0365279628371304
+    },
+    "hs_path_log_slope": {
+      "slope": -0.6861442141511036,
+      "intercept": -0.2640933949719581
+    }
+  },
+  "improvement_ratio": 5.55543484745567,
+  "auxiliary": {
+    "cutoff_improvement_fraction": 1.0,
+    "frac_improve_k24_over_k2": 0.8571428571428571,
+    "frac_nonworse_k246_over_k24": 1.0,
+    "frac_improve_k246_over_k24_resolved": 1.0,
+    "k6_resolved_fraction": 0.0,
+    "max_stability_rel_resolved": 0.0,
+    "improvement_ratio_k246_resolved": 1.0,
+    "synth_trace_distance_max": 0.004788387003954821,
+    "synth_imag_leakage_max": 0.0023729386415435086,
+    "phase_max_abs_error": 0.0061183904935007746,
+    "phase_trace_distance_max": 0.00611839049350078,
+    "hmf_exact_rebuild_max_td": 1.8735013540549517e-16,
+    "max_trace_error": 2.220446049250313e-16
+  },
+  "pass_fail": true
+}

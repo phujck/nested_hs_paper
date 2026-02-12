@@ -1,0 +1,54 @@
+\appendix
+
+\section{\label{app:simulations}Simulation Implementation Details}
+
+This appendix describes the discretised functional sampling protocol used in Sec.~\ref{sec:numerics}. All source code is available in the project repository.
+
+\subsection{Discretisation and kernel construction}
+
+Imaginary time $[0,\beta]$ is discretised into $N$ points $\tau_i = (i + \frac{1}{2})\Delta\tau$ with $\Delta\tau = \beta/N$. The second cumulant is represented by an $N\times N$ exponential kernel:
+\begin{equation}
+    K_{2,ij}^{\text{base}} = \exp\!\left(-\frac{|\tau_i - \tau_j|}{\tau_c}\right),
+    \label{eq:K2_base}
+\end{equation}
+with correlation length $\tau_c$. This kernel is strictly positive definite for all $\tau_c > 0$; its Cholesky factor $L$ ($K_2^{\text{base}} = LL^T$) is computed with a jitter fallback for numerical stability.
+
+The kernel amplitude is calibrated to match the target integrated second cumulant $\kappa_2$. The scalar contraction $S = \Delta\tau^2\,\mathbf{1}^T K_2^{\text{base}}\,\mathbf{1}$ determines the required complex amplitude: $A = 2\kappa_2/S$. We define the complex square root
+\begin{equation}
+    \sqrt[\text{c}]{z} = \sqrt{|z|}\,e^{i\arg(z)/2},
+    \label{eq:complex_sqrt}
+\end{equation}
+which handles contour rotation for non-PSD or complex-valued covariances.
+
+\subsection{Monte Carlo field generation}
+
+At each Monte Carlo sample, two independent fields are drawn:
+
+\textbf{Gaussian field (second cumulant).} Draw $\mathbf{z}\sim\mathcal{N}(0,I_N)$ and form $\boldsymbol{\xi} = \sqrt[\text{c}]{A}\,L\,\mathbf{z}$. The scalar contraction is $X = \Delta\tau\sum_i\xi_i$, which is a zero-mean complex-valued scalar with covariance $\mathbb{E}[X^2] = 2\kappa_2$.
+
+\textbf{Bilocal field (fourth cumulant).} The fourth cumulant contributes through a rank-1 bilocal field whose scalar contraction is $Y$. Draw $z\sim\mathcal{N}(0,1)$ and set $Y = \sqrt[\text{c}]{\text{Var}(Y)}\,z\,N^2\Delta\tau^2$, with $\text{Var}(Y) = 8\kappa_4/(N^4\Delta\tau^4)$. For $\kappa_4 < 0$ (non-PSD), $\sqrt[\text{c}]{\text{Var}(Y)}$ is purely imaginary, rotating the field contour automatically.
+
+\subsection{Weight estimation}
+
+For the qutrit model, the unnormalised weight for eigenvalue $\lambda_k$ given sample $(X, Y)$ is
+\begin{equation}
+    w_k = \exp\!\Big[-\beta J(\lambda_k + \lambda_k^*) + \lambda_k X + \tfrac{1}{2}\lambda_k^2 Y\Big].
+    \label{eq:weight_qutrit}
+\end{equation}
+The populations are estimated as $p_k = \re\bar{w}_k / \sum_j \re\bar{w}_j$, where $\bar{w}_k$ is the sample mean of $w_k$ over $M$ Monte Carlo draws.
+
+For the multi-qubit model, the analogous weight in sector $m$ is $w_m = g(m)\exp(mX + m^2Y/2)$.
+
+\subsection{Common random numbers and vectorisation}
+
+To isolate the effect of parameter variation from Monte Carlo noise, all phase-sweep and correlation-length comparisons use common random numbers (CRN): the same draws $\mathbf{z}$ and $z$ are shared across all parameter values in a given figure panel. This dramatically reduces the variance of \emph{differences} between Monte Carlo estimates at different parameters, enabling clean collapse diagnostics.
+
+The implementation is vectorised: all $M$ samples of $X$ and $Y$ are computed as vector operations, and the weight matrix $W_{mk}$ is formed via an outer product $W = \exp(X\otimes\lambda + \frac{1}{2}Y\otimes\lambda^2)$, avoiding per-sample loops.
+
+\subsection{Error metrics}
+
+\textbf{Population error:} $\varepsilon_{\max} = \max_k |p_k^{\text{MC}} - p_k^{\text{exact}}|$.
+
+\textbf{Trace distance:} $D(p,q) = \frac{1}{2}\sum_k |p_k - q_k|$.
+
+\textbf{Imaginary leakage:} $\ell = \max_k |\im\bar{w}_k|/|\re\bar{w}_k|$, which measures the magnitude of imaginary residuals. In exact arithmetic, Hermiticity of $\bar\rho_S$ guarantees $\ell = 0$ after normalisation; nonzero $\ell$ reflects finite-sample fluctuations and is confirmed to decrease as $1/\sqrt{M}$.

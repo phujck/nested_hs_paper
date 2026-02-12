@@ -1,0 +1,43 @@
+\documentclass[aps,pra,twocolumn,superscriptaddress,showpacs]{revtex4-2}
+
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{hyperref}
+\usepackage{mathtools}
+\usepackage{bbm}
+
+\newcommand{\Tr}{\mathrm{Tr}}
+\newcommand{\re}{\mathrm{Re}\,}
+\newcommand{\im}{\mathrm{Im}\,}
+\setcounter{secnumdepth}{3}
+
+\begin{document}
+
+\title{Nested Hubbard--Stratonovich Representations for Non-Gaussian Influence Functionals}
+\author{Gerard McCaul}
+\date{\today}
+
+\begin{abstract}
+We present a commuting-sector focused formulation of nested Hubbard--Stratonovich (HS) representations for non-Gaussian influence functionals. For a system-bath Hamiltonian $H=H_S+H_B+f\otimes B$, the imaginary-time cumulant expansion of the reduced equilibrium operator is reorganised as a hierarchy of Gaussian HS channels acting on composite operators. In the commuting sector $[H_S,f]=0$, this hierarchy re-averages into a polynomial Hamiltonian of mean force,
+\(
+H_{\mathrm{MF}}=H_S-\sum_{n\ge 1}\alpha_{2n}f^{2n},
+\)
+with coefficients fixed by integrated bath cumulants obtained from derivatives of a source-deformed bath partition function. We validate the construction in two commuting benchmarks: (i) a Gaussian qutrit model with finite-mode bosonic exact diagonalisation and stochastic HS overlays, and (ii) a non-Gaussian qutrit model coupled linearly to a finite transverse-spin bath, where exact diagonalisation is compared to cumulant truncation ladders $K_2$, $K_2{+}K_4$, and $K_2{+}K_4{+}K_6$. Across the sampled parameter range, higher-order cumulants appear as controlled renormalisation corrections and systematically reduce residual error.
+\end{abstract}
+
+\maketitle
+
+\input{sections/00_introduction_v2}
+\input{sections/01_setup_cumulants_v2}
+\input{sections/02_nested_hs_v2}
+\input{sections/03_commuting_sector_v2}
+\input{sections/04_numerical_validation_v2}
+\input{sections/05_consequences_v2}
+\input{sections/06_discussion_v2}
+
+\input{sections/07_appendix_v2}
+
+\bibliography{../../literature/references_new}
+
+\end{document}

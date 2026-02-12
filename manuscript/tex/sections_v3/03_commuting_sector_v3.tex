@@ -1,0 +1,118 @@
+\section{\label{sec:commuting}Commuting Sector Theorem}
+
+We now come to the centrepiece of the paper. Suppose the system coupling operator commutes with the bare Hamiltonian:
+\begin{equation}
+    [H_S,\,f] = 0.
+    \label{eq:commuting_assumption}
+\end{equation}
+This is the ``quantum non-demolition'' or pure-dephasing sector: the bath monitors a quantity that is conserved under the free system dynamics. Physically, this arises whenever the environment couples to a constant of motion---total charge, magnetisation, particle number, or any operator in the centre of the system algebra. It also describes the important class of longitudinal noise channels in qubit systems.
+
+The algebraic consequence is immediate and dramatic. Since $[H_S,f]=0$, the interaction-picture coupling operator loses its $\tau$-dependence:
+\begin{equation}
+    f(\tau) = e^{\tau H_S}\,f\,e^{-\tau H_S} = f.
+    \label{eq:f_tau_independent}
+\end{equation}
+Time ordering becomes redundant: $\mathcal{T}_\tau\,\exp[\cdots] = \exp[\cdots]$,  and all the $n$-local composites collapse:
+\begin{equation}
+    \Psi_n(\tau_1,\ldots,\tau_n) = \prod_{j=1}^n f(\tau_j) = f^n.
+    \label{eq:Psin_commuting}
+\end{equation}
+
+\subsection{Collapse of the auxiliary fields}
+
+Consider the $n$-th level of the nested HS hierarchy from Eq.~\eqref{eq:nested_hs_theorem}. In the commuting sector, the exponent becomes
+\begin{widetext}
+\begin{equation}
+    \frac{1}{n!}\int\!\eta_n(\tau_1,\ldots,\tau_n)\;\Psi_n\;d\tau_1\cdots d\tau_n
+    =
+    \frac{f^n}{n!}\underbrace{\int\!\eta_n(\tau_1,\ldots,\tau_n)\;d\tau_1\cdots d\tau_n}_{=:\,X_n}.
+    \label{eq:Xn_def}
+\end{equation}
+\end{widetext}
+All the multilocal structure has collapsed: the $n$-point auxiliary field $\eta_n$ contributes only through its total ``charge'' $X_n$. Since $\eta_n$ is Gaussian, $X_n$ is a scalar Gaussian variable.
+
+The variance of $X_n$ is obtained by integrating the covariance of $\eta_n$ over all $2n$ time arguments:
+\begin{widetext}
+\begin{align}
+    \mathbb{E}[X_n^2]
+    &=
+    \int\!\mathbb{E}[\eta_n(\tau_1,\ldots,\tau_n)\,\eta_n(\tau_1',\ldots,\tau_n')]\;d\tau_1\cdots d\tau_n\,d\tau_1'\cdots d\tau_n'
+    =
+    \frac{2(n!)^2}{(2n)!}\int\! K_{2n}^{(n|n)}\;d\tau_1\cdots d\tau_{2n}.
+    \label{eq:Xn_variance}
+\end{align}
+\end{widetext}
+But in the commuting sector, the projection $K_{2n}^{(n|n)}$ is redundant---since all time arguments enter symmetrically after integration, every pairing contributes equally:
+\begin{equation}
+    \int K_{2n}^{(n|n)} = \int K_{2n}.
+    \label{eq:projection_trivial}
+\end{equation}
+Therefore
+\begin{equation}
+    \mathbb{E}[X_n^2] = \frac{2(n!)^2}{(2n)!}\int_0^\beta d\tau_1\cdots d\tau_{2n}\;K_{2n}(\tau_1,\ldots,\tau_{2n}).
+    \label{eq:Xn_var_explicit}
+\end{equation}
+
+\subsection{Analytic re-averaging}
+
+The $n$-th level HS average now reads
+\begin{equation}
+    \mathbb{E}_{\eta_n}\!\left[e^{f^n X_n/n!}\right]
+    =
+    \exp\!\left[\frac{f^{2n}}{2(n!)^2}\,\mathbb{E}[X_n^2]\right],
+    \label{eq:gaussian_moment}
+\end{equation}
+since the moment generating function of a zero-mean Gaussian $X$ with variance $\sigma^2$ is $\mathbb{E}[e^{tX}]=e^{t^2\sigma^2/2}$. Substituting Eq.~\eqref{eq:Xn_var_explicit}:
+\begin{align}
+    \mathbb{E}_{\eta_n}\!\left[e^{f^n X_n/n!}\right]
+    &=
+    \exp\!\left[\frac{f^{2n}}{2(n!)^2}\cdot\frac{2(n!)^2}{(2n)!}\int K_{2n}\right]
+    \nonumber\\
+    &=
+    \exp\!\left[\frac{f^{2n}}{(2n)!}\int K_{2n}\right]
+    \nonumber\\
+    &=
+    \exp\!\left[\alpha_{2n}\,f^{2n}\right],
+    \label{eq:level_n_result}
+\end{align}
+where we define the integrated cumulant coefficient
+\begin{equation}
+    \alpha_{2n} := \frac{1}{(2n)!}\int_0^\beta d\tau_1\cdots d\tau_{2n}\;K_{2n}(\tau_1,\ldots,\tau_{2n}).
+    \label{eq:alpha2n_def}
+\end{equation}
+Everything cancels beautifully: the $(n!)^2$ from the HS covariance formula eats the $(n!)^2$ in the denominator from the coupling $f^n/n!$ squared, and what remains is the natural cumulant prefactor $1/(2n)!$. 
+
+\subsection{The theorem}
+
+Combining all levels of the hierarchy, the reduced equilibrium operator becomes
+
+\medskip
+\noindent\fbox{\parbox{0.95\columnwidth}{%
+\textbf{Commuting Sector Theorem.} \emph{If\/ $[H_S,f]=0$ and all odd cumulants vanish, then}
+\begin{equation}
+    \bar\rho_S(\beta)
+    =
+    Z_B\,\exp\!\left(-\beta H_S + \sum_{n=1}^{\infty}\alpha_{2n}\,f^{2n}\right),
+    \label{eq:commuting_theorem}
+\end{equation}
+\emph{with $\alpha_{2n}$ given by Eq.~\eqref{eq:alpha2n_def}. Equivalently, the Hamiltonian of mean force is}
+\begin{equation}
+    H_{\mathrm{MF}}(\beta) = H_S - \frac{1}{\beta}\sum_{n=1}^{\infty}\alpha_{2n}(\beta)\,f^{2n}.
+    \label{eq:HMF_commuting_full}
+\end{equation}
+}}
+\medskip
+
+\noindent Several points are worth emphasising:
+
+\begin{enumerate}
+    \item \textbf{Exactness.} This is not a perturbative result. It holds for arbitrary coupling strength, arbitrary temperature, and arbitrary (even non-Gaussian) bath statistics. No truncation of the cumulant series is performed; the theorem holds order by order, and resumming is exact.
+
+    \item \textbf{No PSD requirement.} Nowhere did we assume that any cumulant kernel $K_{2n}$ is positive semi-definite. The HS transformation is valid for indefinite and complex kernels, with convergence guaranteed by contour rotation. In physical terms: baths with sub-Gaussian tails (like bounded spin baths) generically produce $K_4 < 0$, and the construction handles this without difficulty.
+
+    \item \textbf{Contour rotation suffices.} For complex $\alpha_{2n}$ (arising from complex integrated cumulants), the exponential in Eq.~\eqref{eq:commuting_theorem} is well-defined as a matrix function in any eigenbasis of $f$. Hermiticity of $\bar\rho_S$ is ensured by the Hermiticity constraints on the cumulants of a self-adjoint operator $B$.
+
+    \item \textbf{Gaussian limit.} Setting $K_n = 0$ for $n \geq 3$ gives $\alpha_2 = \frac{1}{2}\int\!\!\int K_2(\tau,\tau')\,d\tau\,d\tau' = \frac{1}{2}C(\beta)$, reproducing $-\lambda f^2$ with $\lambda = C(\beta)/(2\beta)$---the reorganisation energy result of the companion paper.
+\end{enumerate}
+
+The theorem tells us that the entire bath influence, in the commuting sector, enters as a renormalised polynomial in $f$. The coefficients $\alpha_{2n}$ are nothing but the integrated cumulants of the bath coupling operator, weighted by the natural combinatorial factor $1/(2n)!$. Each cumulant order contributes one new power of $f^2$ to the Hamiltonian of mean force.
