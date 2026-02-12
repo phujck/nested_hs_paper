@@ -1,0 +1,59 @@
+\section{\label{sec:numerics}Numerical Validation}
+
+We validate the nested HS construction and the commuting-sector theorem with two numerical demonstrations. Both operate entirely in the commuting sector $[H_S,f]=0$ and compare discretised functional HS sampling against exact analytic predictions. The first uses a qutrit clock model to stress-test the non-PSD regime; the second uses a multi-qubit magnetisation model to demonstrate convergence in a many-body setting. Full implementation details are in Appendix~\ref{app:simulations}.
+
+\subsection{Qutrit clock model}
+
+The system is a qutrit with clock coupling $f = Z_3 = \mathrm{diag}(1,\omega,\omega^2)$, $\omega = e^{2\pi i/3}$, and bare Hamiltonian $H_S = J(f + f^\dagger)$. This is a natural test bed because the clock algebra closes at order three ($f^3 = I$), so the Gaussian and quartic cumulants contribute to distinct operator channels (see Sec.~\ref{sec:consequences}).
+
+We parametrise the bath by complex integrated cumulants $\kappa_4 = r\,e^{i\phi}$ and $\kappa_2 = \kappa_4^*$ (ensuring Hermiticity), and sweep the phase $\phi\in[-\pi,\pi]$ at fixed amplitude $r = 0.45$, $J = 0.6$, $\beta = 1$. For each $\phi$, the analytic prediction follows directly from Eq.~\eqref{eq:commuting_theorem}:
+\begin{equation}
+    p_k = \frac{w_k}{\sum_j w_j},\quad
+    w_k = \exp\!\big[-\beta J(\lambda_k+\lambda_k^*) + \kappa_2\lambda_k^2 + \kappa_4\lambda_k\big],
+    \label{eq:qutrit_analytic}
+\end{equation}
+where $\lambda_k = \omega^k$ ($k=0,1,2$) are the eigenvalues of $f$.
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=\columnwidth]{../../simulations/results/figures/fig1_populations_collapse.pdf}
+    \caption{\label{fig:qutrit_validation}Populations versus cumulant phase for the qutrit clock model. Solid lines: analytic prediction from Eq.~\eqref{eq:qutrit_analytic}. Markers: Monte Carlo estimates from full discretised functional HS sampling at three different correlation lengths $\tau_c$. Agreement is quantitative across the entire phase range, confirming correlation-length independence: only the integrated cumulants matter.}
+\end{figure}
+
+The Monte Carlo estimates are obtained by discretised functional sampling: an $N$-point imaginary-time grid carries a Gaussian field $\xi$ with an exponential kernel $K_2^{\text{base}}(\tau,\tau') = e^{-|\tau-\tau'|/\tau_c}$, calibrated so that the scalar contraction gives $\text{Var}(X) = 2\kappa_2$, plus an independent bilocal scalar $s$ calibrated for the quartic contraction $\text{Var}(Y) = 8\kappa_4$. For non-PSD parameters (e.g.\ near $\phi = 0.9\pi$), the complex variances are handled by drawing real Gaussian deviates and multiplying by $\sqrt{|\text{Var}|}\,e^{i\arg(\text{Var})/2}$---contour rotation in action.
+
+Figure~\ref{fig:qutrit_validation} shows the key result: Monte Carlo populations agree quantitatively with the analytic curve for all $\phi$, with three different $\tau_c$ values collapsing onto the same universal curve. This demonstrates that the detailed time structure of the kernel is irrelevant---only the integrated cumulants enter the commuting-sector HMF.
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=\columnwidth]{../../simulations/results/figures/fig2_crn_replicas.pdf}
+    \caption{\label{fig:qutrit_diagnostics}Left: CRN error curves for three correlation lengths (common random numbers). Right: replica error statistics (12 independent replicas, $M = 50{,}000$ samples each), showing mean $\pm 1\sigma$ bands. The error is uniformly $\mathcal{O}(10^{-3})$ and independent of $\tau_c$.}
+\end{figure}
+
+Figure~\ref{fig:qutrit_diagnostics} provides quantitative error diagnostics. With common random numbers (CRN), the maximum population error is uniformly $\lesssim 10^{-3}$ for $M = 120{,}000$ samples. Replica statistics confirm that the error is Gaussian-distributed across independent runs, with no systematic bias.
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=\columnwidth]{../../simulations/results/figures/fig3_M_scaling.pdf}
+    \caption{\label{fig:qutrit_scaling}$\sqrt{M}$-rescaled error versus phase. The collapse of all three curves confirms the expected $1/\sqrt{M}$ Monte Carlo convergence rate.}
+\end{figure}
+
+Figure~\ref{fig:qutrit_scaling} shows the $\sqrt{M}$ scaling collapse: plotting $\sqrt{M}\times\varepsilon$ for $M\in\{20{,}000, 80{,}000, 320{,}000\}$ gives curves that coincide, confirming the standard $1/\sqrt{M}$ convergence expected for a well-defined Monte Carlo estimator.
+
+\subsection{Multi-qubit magnetisation model}
+
+\begin{figure*}[t]
+    \centering
+    \includegraphics[width=\textwidth]{../../simulations/results/figures/fig_multiqubit.pdf}
+    \caption{\label{fig:multiqubit}Multi-qubit $S_z$ model ($N=4$ qubits). Left: PSD case ($k_4 = 0.003 > 0$). Centre: non-PSD case ($k_4 = -0.003 < 0$, contour-rotated sampling). Right: trace-distance convergence $D \propto 1/\sqrt{M}$ in both regimes. Bar heights compare analytic (shaded) and MC (solid) sector probabilities.}
+\end{figure*}
+
+The second test uses $N = 4$ qubits with $H_S = 0$ and coupling $f = S_z = \sum_{i=1}^N Z_i$, so that the system is block-diagonal in magnetisation sectors $m \in \{-4,-2,0,2,4\}$ with degeneracies $g(m) = \binom{4}{(4+m)/2}$. The bath deformation is $F(S_z) = k_2\,S_z^2 + k_4\,S_z^4$. The exact sector probabilities are
+\begin{equation}
+    p(m) = \frac{g(m)\,e^{k_2 m^2 + k_4 m^4}}{\sum_{m'} g(m')\,e^{k_2 m'^2 + k_4 m'^4}}.
+    \label{eq:multiqubit_exact}
+\end{equation}
+
+The HS representation gives $e^{k_2 m^2 + k_4 m^4} = \mathbb{E}_{X,Y}[e^{mX + m^2 Y/2}]$ with $X\sim\mathcal{N}(0,2k_2)$ and $Y\sim\mathcal{N}(0,8k_4)$; for $k_4 < 0$, $Y$ is drawn as $Y = i\sqrt{8|k_4|}\,Z$ with $Z\sim\mathcal{N}(0,1)$.
+
+Figure~\ref{fig:multiqubit} confirms quantitative agreement in both the PSD ($k_4 > 0$) and non-PSD ($k_4 < 0$) regimes. Trace distances are $\lesssim 5\times 10^{-3}$ at $M = 100{,}000$, with $1/\sqrt{M}$ convergence confirmed in the right panel.

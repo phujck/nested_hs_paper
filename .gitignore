@@ -1,0 +1,30 @@
+# LaTeX build artifacts
+*.aux
+*.bbl
+*.blg
+*.log
+*.out
+*.toc
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.dvi
+*.nav
+*.snm
+
+# Build directories
+manuscript/build/
+manuscript/tex_build_archive/
+
+# Stray LaTeX outputs in source dirs
+manuscript/tex/*.pdf
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+env/
+.pytest_cache/
+
+# VS Code
+.vscode/
