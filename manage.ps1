@@ -14,14 +14,17 @@ if ($Command -eq "install") {
     & $PythonStr -m pip install -r requirements.txt
 }
 elseif ($Command -eq "sim") {
-    & $PythonStr simulations/src/qutrit_clock.py
-    & $PythonStr simulations/src/multiqubit_sz.py
+    & $PythonStr simulations/src/run_nested_hs_suite.py --regime all --profile full --seed 42
+    & $PythonStr simulations/src/plot_nested_hs_suite.py
+    & $PythonStr simulations/src/validate_nested_hs_claims.py
 }
 elseif ($Command -eq "sim-qutrit") {
-    & $PythonStr simulations/src/qutrit_clock.py
+    & $PythonStr simulations/src/run_nested_hs_suite.py --regime cg --profile full --seed 42
+    & $PythonStr simulations/src/plot_nested_hs_suite.py
 }
 elseif ($Command -eq "sim-qubit") {
-    & $PythonStr simulations/src/multiqubit_sz.py
+    & $PythonStr simulations/src/run_nested_hs_suite.py --regime cng --profile full --seed 42
+    & $PythonStr simulations/src/plot_nested_hs_suite.py
 }
 elseif ($Command -eq "paper") {
     Push-Location manuscript/tex
