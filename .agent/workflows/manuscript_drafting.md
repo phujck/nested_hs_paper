@@ -23,10 +23,14 @@ description: Workflow for drafting, polishing, and submitting manuscripts.
 - **Citations**: Resolve all `[ref]` placeholders. Ensure key authors (Anders, Ankerhold, Nazir) are cited.
 - **Formatting**: Fix floats, overfull hboxes, and equation numbering.
 
-## 5. Submission (`arxiv_submission/`)
-- Create a flattened directory.
-- Copy `main.tex` and `main.bbl`.
-- Copy all section files.
-- Copy all figures to a local `figures/` folder.
-- Update figure paths in `.tex` files to point to local `figures/`.
-- Zip the folder for upload.
+## 5. Submission (`arxiv_submission_flat/`)
+- **Automated Flattening**:
+    - Run the standardized script: `powershell -ExecutionPolicy Bypass -File .agent/scripts/flatten_arxiv.ps1`
+    - This script automates:
+        - Cleaning `arxiv_submission_flat/`
+        - Copying and flattening all assets
+        - Rewriting `\input` and `\includegraphics` paths
+        - Creating `arxiv_submission_flat.zip`
+- **Manual Verification**:
+    - Unzip and check `main.tex` for correct paths.
+    - Upload `arxiv_submission_flat.zip` to arXiv.
